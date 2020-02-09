@@ -18,15 +18,15 @@ struct ContentView: View {
 
     var body: some View {
         VStack {
-            /*
-            Spacer()
+
+            //Spacer()
 
             Text("Orion In SwiftUI")
-                .fixedSize()
-                .font(.largeTitle)
+                //.fixedSize()
+                .font(.headline)
 
-            Spacer()
-            */
+            //Spacer()
+
 
             SceneKitView(lightSwitch: $lightSwitch,
                          sunlightSwitch: $sunlightSwitch,
@@ -34,11 +34,11 @@ struct ContentView: View {
                 //.scaleEffect(0.9, anchor: .center)
 
 
-            //Spacer()
+            Spacer()
 
-            //ControlsView(lightSwitch: $lightSwitch, sunlightSwitch: $sunlightSwitch, bodyCameraSwitch: $spacecraftCameraSwitch)
+            ControlsView(lightSwitch: $lightSwitch, sunlightSwitch: $sunlightSwitch, bodyCameraSwitch: $spacecraftCameraSwitch)
 
-            //Text("Motion Data")
+            Text("Motion Data")
             //Text("quaternion: \(motion.motionQuaternion.debugDescription)")
 
             
