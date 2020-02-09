@@ -29,6 +29,8 @@ struct SceneKitView: UIViewRepresentable {
     // SceneKit Properties
     let scene = SCNScene(named: "GyroSwiftUISceneKitAssets.scnassets/Orion_CSM/Orion_CSM.scn")!
 
+    //var orionCSMNode: SCNNode = SCNNode()
+
     //var sunlightNode: SCNNode = SCNNode()
 
     var lightTextNode: SKLabelNode = SKLabelNode(fontNamed: "HelveticaNeue")
@@ -46,6 +48,9 @@ struct SceneKitView: UIViewRepresentable {
 
         // WorldCamera from scn file.
         scnView.pointOfView = scene.rootNode.childNode(withName: "OrionChase360CameraNode", recursively: true)
+
+        // Create Node
+        //orionCSMNode = scene.rootNode.childNode(withName: "Orion_CSM", recursively: true)!
 
         // Now, using WorldLight from scn file.
         let sunlight  = scene.rootNode.childNode(withName: "SunLight", recursively: true)!
@@ -73,13 +78,13 @@ struct SceneKitView: UIViewRepresentable {
         */
 
         // Double-Tap Gesture Recognizer to Reset Orientation of the Model
-        //let doubleTapGestureRecognizer = UITapGestureRecognizer(target: context.coordinator, action: #selector(Coordinator.triggerDoubleTapAction(gestureReconizer:)))
-        //doubleTapGestureRecognizer.numberOfTapsRequired = 2
-        //scnView.addGestureRecognizer(doubleTapGestureRecognizer)
+        let doubleTapGestureRecognizer = UITapGestureRecognizer(target: context.coordinator, action: #selector(Coordinator.triggerDoubleTapAction(gestureReconizer:)))
+        doubleTapGestureRecognizer.numberOfTapsRequired = 2
+        scnView.addGestureRecognizer(doubleTapGestureRecognizer)
 
 
-        //let panGestureRecognizer = UIPanGestureRecognizer(target: context.coordinator, action: #selector(Coordinator.panGesture(_:)))
-        //scnView.addGestureRecognizer(panGestureRecognizer)
+        let panGestureRecognizer = UIPanGestureRecognizer(target: context.coordinator, action: #selector(Coordinator.panGesture(_:)))
+        scnView.addGestureRecognizer(panGestureRecognizer)
 
         return scnView
     }
@@ -167,7 +172,7 @@ struct SceneKitView: UIViewRepresentable {
 
         // Double-Tap Action
         @objc func triggerDoubleTapAction(gestureReconizer: UITapGestureRecognizer) {
-
+            print("Just double-tapped")
             guard let spacecraftNode = self.scnView.scene.rootNode.childNode(withName: "Orion_CSM", recursively: true) else{
                 print("There's no Spacecraft Node!")
                 return
@@ -188,6 +193,8 @@ struct SceneKitView: UIViewRepresentable {
         @objc func panPiece(_ gestureRecognizer : UIPanGestureRecognizer) {
             guard gestureRecognizer.view != nil else {return}
 
+            print("More panning...")
+            
             let piece = gestureRecognizer.view!
 
             // Get the changes in the X and Y directions relative to the superview's coordinate space.
@@ -216,7 +223,7 @@ struct SceneKitView: UIViewRepresentable {
         var totalChangePivot = SCNMatrix4Identity
 
         @objc func panGesture(_ gestureRecognize: UIPanGestureRecognizer){
-
+            print("Panning...")
             let translation = gestureRecognize.translation(in: gestureRecognize.view!)
 
             let x = Float(translation.x)
