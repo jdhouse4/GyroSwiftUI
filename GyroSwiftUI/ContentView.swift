@@ -9,13 +9,24 @@
 import SwiftUI
 
 struct ContentView: View {
+    @ObservedObject var motion: MotionManager
+
+
     var body: some View {
-        Text("Hello, World!")
+        VStack {
+            Text("Motion Data")
+            Text("quaternion: \(motion.motionQuaternion.debugDescription)")
+
+            
+        }
     }
 }
 
+
+
+
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        ContentView(motion: MotionManager())
     }
 }
