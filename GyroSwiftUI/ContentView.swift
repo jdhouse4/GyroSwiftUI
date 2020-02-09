@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    //@ObservedObject var motion: MotionManager
+    //@ObservedObject var motion: MotionManager = MotionManager()
 
     @State var lightSwitch: Bool            = false
     @State var sunlightSwitch: Int          = 0

@@ -14,6 +14,7 @@ import SpriteKit
 
 
 struct SceneKitView: UIViewRepresentable {
+    @ObservedObject var motion: MotionManager = MotionManager()
 
 
     func makeCoordinator() -> Coordinator {
@@ -118,6 +119,8 @@ struct SceneKitView: UIViewRepresentable {
         toggleSunlight(scnView)
 
         toggleSpacecraftCamera(scnView)
+
+        print("Motion Manager: \(motion.motionQuaternion.debugDescription)")
     }
 
 
@@ -182,7 +185,7 @@ struct SceneKitView: UIViewRepresentable {
 
         // Double-Tap Action
         @objc func triggerDoubleTapAction(gestureReconizer: UITapGestureRecognizer) {
-            print("Just double-tapped")
+            //print("Just double-tapped")
             guard let spacecraftNode = self.scnView.scene.rootNode.childNode(withName: "Orion_CSM", recursively: true) else{
                 print("There's no Spacecraft Node!")
                 return
@@ -234,7 +237,7 @@ struct SceneKitView: UIViewRepresentable {
         var totalChangePivot = SCNMatrix4Identity
 
         @objc func panGesture(_ gestureRecognize: UIPanGestureRecognizer){
-            print("Panning...")
+            //print("Panning...")
             let translation = gestureRecognize.translation(in: gestureRecognize.view!)
 
             let x = Float(translation.x)
