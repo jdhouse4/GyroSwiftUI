@@ -35,7 +35,7 @@ struct SceneKitView: UIViewRepresentable {
 
     var lightTextNode: SKLabelNode = SKLabelNode(fontNamed: "HelveticaNeue")
 
-    var overlayScene: SKScene = SKScene()
+    //var overlayScene: SKScene = SKScene()
 
 
 
@@ -47,13 +47,20 @@ struct SceneKitView: UIViewRepresentable {
         scnView.backgroundColor = UIColor.black
 
         // WorldCamera from scn file.
-        scnView.pointOfView = scene.rootNode.childNode(withName: "OrionChase360CameraNode", recursively: true)
+        if let exteriorCameraNode = scene.rootNode.childNode(withName: "OrionChase360CameraNode", recursively: true) {
+            print("Found OrionChase360CameraNode")
+            scnView.pointOfView = exteriorCameraNode
+        }
+        else { print("Couldn't find OrionChase360CameraNode") }
+
+        //scnView.pointOfView = scene.rootNode.childNode(withName: "OrionCommanderCameraNode", recursively: true)
+
 
         // Create Node
         //orionCSMNode = scene.rootNode.childNode(withName: "Orion_CSM", recursively: true)!
 
         // Now, using WorldLight from scn file.
-        let sunlight  = scene.rootNode.childNode(withName: "SunLight", recursively: true)!
+        //let sunlight  = scene.rootNode.childNode(withName: "SunLight", recursively: true)!
 
         // This code is needed for placing the overlay text.
         //let screenSize: CGSize =  UIScreen.main.bounds.size
