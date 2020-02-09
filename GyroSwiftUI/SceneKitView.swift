@@ -27,7 +27,7 @@ struct SceneKitView: UIViewRepresentable {
 
 
     // SceneKit Properties
-    let scene = SCNScene(named: "Orion_CSM.scn")!
+    let scene = SCNScene(named: "GyroSwiftUISceneKitAssets.scnassets/Orion_CSM/Orion_CSM.scn")!
 
     //var sunlightNode: SCNNode = SCNNode()
 
@@ -48,7 +48,7 @@ struct SceneKitView: UIViewRepresentable {
         scnView.pointOfView = scene.rootNode.childNode(withName: "OrionChase360CameraNode", recursively: true)
 
         // Now, using WorldLight from scn file.
-       // let sunlight  = scene.rootNode.childNode(withName: "SunLight", recursively: true)!
+        let sunlight  = scene.rootNode.childNode(withName: "SunLight", recursively: true)!
 
         // This code is needed for placing the overlay text.
         //let screenSize: CGSize =  UIScreen.main.bounds.size
@@ -73,13 +73,13 @@ struct SceneKitView: UIViewRepresentable {
         */
 
         // Double-Tap Gesture Recognizer to Reset Orientation of the Model
-        let doubleTapGestureRecognizer = UITapGestureRecognizer(target: context.coordinator, action: #selector(Coordinator.triggerDoubleTapAction(gestureReconizer:)))
-        doubleTapGestureRecognizer.numberOfTapsRequired = 2
-        scnView.addGestureRecognizer(doubleTapGestureRecognizer)
+        //let doubleTapGestureRecognizer = UITapGestureRecognizer(target: context.coordinator, action: #selector(Coordinator.triggerDoubleTapAction(gestureReconizer:)))
+        //doubleTapGestureRecognizer.numberOfTapsRequired = 2
+        //scnView.addGestureRecognizer(doubleTapGestureRecognizer)
 
 
-        let panGestureRecognizer = UIPanGestureRecognizer(target: context.coordinator, action: #selector(Coordinator.panGesture(_:)))
-        scnView.addGestureRecognizer(panGestureRecognizer)
+        //let panGestureRecognizer = UIPanGestureRecognizer(target: context.coordinator, action: #selector(Coordinator.panGesture(_:)))
+        //scnView.addGestureRecognizer(panGestureRecognizer)
 
         return scnView
     }
@@ -90,28 +90,28 @@ struct SceneKitView: UIViewRepresentable {
         // set the scene to the view
         scnView.scene = scene
 
-        scnView.backgroundColor = UIColor.black
+        scnView.backgroundColor     = UIColor.black
 
-        scnView.allowsCameraControl                                 = false
+        scnView.allowsCameraControl = false
 
         // show statistics such as fps and timing information
-        scnView.showsStatistics = true
+        scnView.showsStatistics     = true
 
-        toggleBuzzFaceLamp(scnView)
+        //toggleBuzzFaceLamp(scnView)
 
-        toggleSunlight(scnView)
+        //toggleSunlight(scnView)
 
-        toggleSpacecraftCamera(scnView)
+        //toggleSpacecraftCamera(scnView)
     }
 
 
-
+    /*
     func toggleBuzzFaceLamp(_ scnView: SCNView) {
         guard let lightNode = scnView.scene!.rootNode.childNode(withName: "BuzzFaceLight", recursively: true) else { return }
 
         lightNode.isHidden = lightSwitch
     }
-
+    */
 
 
     func toggleSunlight(_ scnView: SCNView) {
@@ -137,7 +137,7 @@ struct SceneKitView: UIViewRepresentable {
     }
 
 
-
+    /*
     func toggleSpacecraftCamera(_ scnView: SCNView) {
         if spacecraftCameraSwitch == true {
             scnView.pointOfView = scnView.scene?.rootNode.childNode(withName: "OrionCommanderCameraNode", recursively: true)
@@ -146,7 +146,7 @@ struct SceneKitView: UIViewRepresentable {
             scnView.pointOfView = scnView.scene?.rootNode.childNode(withName: "OrionChase360CameraNode", recursively: true)
         }
     }
-
+    */
 
 
 

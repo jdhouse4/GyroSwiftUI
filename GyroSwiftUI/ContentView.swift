@@ -11,11 +11,22 @@ import SwiftUI
 struct ContentView: View {
     @ObservedObject var motion: MotionManager
 
+    @State var lightSwitch: Bool            = false
+    @State var sunlightSwitch: Int          = 0
+    @State var spacecraftCameraSwitch: Bool = false
+
 
     var body: some View {
         VStack {
+            SceneKitView(lightSwitch: $lightSwitch,
+                         sunlightSwitch: $sunlightSwitch,
+                         spacecraftCameraSwitch: $spacecraftCameraSwitch)
+                .scaleEffect(0.8, anchor: .top)
+
+            Spacer()
+
             Text("Motion Data")
-            Text("quaternion: \(motion.motionQuaternion.debugDescription)")
+            //Text("quaternion: \(motion.motionQuaternion.debugDescription)")
 
             
         }
