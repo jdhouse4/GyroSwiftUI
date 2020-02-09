@@ -16,7 +16,10 @@
 		E60AC21F23C39FEE007DECD8 /* MotionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60AC21E23C39FEE007DECD8 /* MotionManager.swift */; };
 		E60AC22123C3EA90007DECD8 /* MotionControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60AC22023C3EA90007DECD8 /* MotionControlsView.swift */; };
 		E60AC22323C3F2F6007DECD8 /* SceneKitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60AC22223C3F2F6007DECD8 /* SceneKitView.swift */; };
-		E656DDAA23CED159007AF7D5 /* GyroSwiftUISceneKitAssets.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = E656DDA923CED159007AF7D5 /* GyroSwiftUISceneKitAssets.scnassets */; };
+		E6936B3323F0B61A002C3EAD /* SunLightButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6936B3023F0B619002C3EAD /* SunLightButton.swift */; };
+		E6936B3423F0B61A002C3EAD /* CameraButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6936B3123F0B619002C3EAD /* CameraButton.swift */; };
+		E6936B3523F0B61A002C3EAD /* ControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6936B3223F0B61A002C3EAD /* ControlsView.swift */; };
+		E6936B3723F0B976002C3EAD /* GyroSwiftUI.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = E6936B3623F0B976002C3EAD /* GyroSwiftUI.scnassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,7 +34,10 @@
 		E60AC21E23C39FEE007DECD8 /* MotionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotionManager.swift; sourceTree = "<group>"; };
 		E60AC22023C3EA90007DECD8 /* MotionControlsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotionControlsView.swift; sourceTree = "<group>"; };
 		E60AC22223C3F2F6007DECD8 /* SceneKitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneKitView.swift; sourceTree = "<group>"; };
-		E656DDA923CED159007AF7D5 /* GyroSwiftUISceneKitAssets.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = GyroSwiftUISceneKitAssets.scnassets; sourceTree = "<group>"; };
+		E6936B3023F0B619002C3EAD /* SunLightButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SunLightButton.swift; sourceTree = "<group>"; };
+		E6936B3123F0B619002C3EAD /* CameraButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraButton.swift; sourceTree = "<group>"; };
+		E6936B3223F0B61A002C3EAD /* ControlsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ControlsView.swift; sourceTree = "<group>"; };
+		E6936B3623F0B976002C3EAD /* GyroSwiftUI.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = GyroSwiftUI.scnassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,13 +74,16 @@
 				E60AC20C23C39EC0007DECD8 /* SceneDelegate.swift */,
 				E60AC20E23C39EC0007DECD8 /* ContentView.swift */,
 				E60AC22223C3F2F6007DECD8 /* SceneKitView.swift */,
+				E6936B3123F0B619002C3EAD /* CameraButton.swift */,
 				E60AC22023C3EA90007DECD8 /* MotionControlsView.swift */,
+				E6936B3223F0B61A002C3EAD /* ControlsView.swift */,
+				E6936B3023F0B619002C3EAD /* SunLightButton.swift */,
 				E60AC21E23C39FEE007DECD8 /* MotionManager.swift */,
 				E60AC21023C39EC3007DECD8 /* Assets.xcassets */,
-				E656DDA923CED159007AF7D5 /* GyroSwiftUISceneKitAssets.scnassets */,
 				E60AC21523C39EC3007DECD8 /* LaunchScreen.storyboard */,
 				E60AC21823C39EC3007DECD8 /* Info.plist */,
 				E60AC21223C39EC3007DECD8 /* Preview Content */,
+				E6936B3623F0B976002C3EAD /* GyroSwiftUI.scnassets */,
 			);
 			path = GyroSwiftUI;
 			sourceTree = "<group>";
@@ -145,8 +154,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E6936B3723F0B976002C3EAD /* GyroSwiftUI.scnassets in Resources */,
 				E60AC21723C39EC3007DECD8 /* LaunchScreen.storyboard in Resources */,
-				E656DDAA23CED159007AF7D5 /* GyroSwiftUISceneKitAssets.scnassets in Resources */,
 				E60AC21423C39EC3007DECD8 /* Preview Assets.xcassets in Resources */,
 				E60AC21123C39EC3007DECD8 /* Assets.xcassets in Resources */,
 			);
@@ -159,7 +168,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E6936B3323F0B61A002C3EAD /* SunLightButton.swift in Sources */,
+				E6936B3523F0B61A002C3EAD /* ControlsView.swift in Sources */,
 				E60AC20B23C39EC0007DECD8 /* AppDelegate.swift in Sources */,
+				E6936B3423F0B61A002C3EAD /* CameraButton.swift in Sources */,
 				E60AC22123C3EA90007DECD8 /* MotionControlsView.swift in Sources */,
 				E60AC22323C3F2F6007DECD8 /* SceneKitView.swift in Sources */,
 				E60AC20D23C39EC0007DECD8 /* SceneDelegate.swift in Sources */,
@@ -313,7 +325,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.portablefrontier.GyroSwiftUI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -334,7 +346,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.portablefrontier.GyroSwiftUI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

@@ -27,7 +27,7 @@ struct SceneKitView: UIViewRepresentable {
 
 
     // SceneKit Properties
-    let scene = SCNScene(named: "GyroSwiftUISceneKitAssets.scnassets/Orion_CSM/Orion_CSM.scn")!
+    let scene = SCNScene(named: "GyroSwiftUI.scnassets/Orion_CSM.scn")!
 
     //var orionCSMNode: SCNNode = SCNNode()
 
@@ -40,6 +40,9 @@ struct SceneKitView: UIViewRepresentable {
 
 
     func makeUIView(context: Context) -> SCNView {
+        print("makeUIView")
+
+        
         // retrieve the SCNView
         let scnView = SCNView()
 
@@ -47,8 +50,8 @@ struct SceneKitView: UIViewRepresentable {
         scnView.backgroundColor = UIColor.black
 
         // WorldCamera from scn file.
-        if let exteriorCameraNode = scene.rootNode.childNode(withName: "OrionChase360CameraNode", recursively: true) {
-            print("Found OrionChase360CameraNode")
+        if let exteriorCameraNode = scene.rootNode.childNode(withName: "OrionCommanderCameraNode", recursively: true) {
+            print("Found OrionCommanderCameraNode")
             scnView.pointOfView = exteriorCameraNode
         }
         else { print("Couldn't find OrionChase360CameraNode") }
@@ -99,10 +102,11 @@ struct SceneKitView: UIViewRepresentable {
 
 
     func updateUIView(_ scnView: SCNView, context: Context) {
+        //print("updateUIView")
         // set the scene to the view
         scnView.scene = scene
 
-        scnView.backgroundColor     = UIColor.black
+        //scnView.backgroundColor     = UIColor.black
 
         scnView.allowsCameraControl = false
 
@@ -111,9 +115,9 @@ struct SceneKitView: UIViewRepresentable {
 
         //toggleBuzzFaceLamp(scnView)
 
-        //toggleSunlight(scnView)
+        toggleSunlight(scnView)
 
-        //toggleSpacecraftCamera(scnView)
+        toggleSpacecraftCamera(scnView)
     }
 
 
@@ -149,16 +153,15 @@ struct SceneKitView: UIViewRepresentable {
     }
 
 
-    /*
+
     func toggleSpacecraftCamera(_ scnView: SCNView) {
         if spacecraftCameraSwitch == true {
             scnView.pointOfView = scnView.scene?.rootNode.childNode(withName: "OrionCommanderCameraNode", recursively: true)
         } else {
-            //scnView.pointOfView = scnView.scene?.rootNode.childNode(withName: "Camera", recursively: true)
             scnView.pointOfView = scnView.scene?.rootNode.childNode(withName: "OrionChase360CameraNode", recursively: true)
         }
     }
-    */
+
 
 
 
@@ -184,6 +187,7 @@ struct SceneKitView: UIViewRepresentable {
                 print("There's no Spacecraft Node!")
                 return
             }
+            print("spacecraftNode: \(String(describing: spacecraftNode.name))")
 
             let currentPivot = spacecraftNode.pivot
 
@@ -242,6 +246,7 @@ struct SceneKitView: UIViewRepresentable {
                 print("There's no Spacecraft Node!")
                 return
             }
+            //print("spacecraftNode: \(String(describing: spacecraftNode.name))")
 
             var rotationVector = spacecraftNode.rotation // SCNVector4()
             rotationVector.x = -y

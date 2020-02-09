@@ -18,7 +18,7 @@ class MotionManager: ObservableObject {
 
     @Published var motionQuaternion: simd_quatf = simd_quatf()
 
-    var referenceFrame:     CMAttitude?
+    var referenceFrame: CMAttitude?
     var motionTimer: Timer?
 
 

@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @ObservedObject var motion: MotionManager
+    //@ObservedObject var motion: MotionManager
 
     @State var lightSwitch: Bool            = false
     @State var sunlightSwitch: Int          = 0
@@ -18,14 +18,27 @@ struct ContentView: View {
 
     var body: some View {
         VStack {
+            /*
+            Spacer()
+
+            Text("Orion In SwiftUI")
+                .fixedSize()
+                .font(.largeTitle)
+
+            Spacer()
+            */
+
             SceneKitView(lightSwitch: $lightSwitch,
                          sunlightSwitch: $sunlightSwitch,
                          spacecraftCameraSwitch: $spacecraftCameraSwitch)
-                .scaleEffect(0.8, anchor: .top)
+                //.scaleEffect(0.9, anchor: .center)
 
-            Spacer()
 
-            Text("Motion Data")
+            //Spacer()
+
+            //ControlsView(lightSwitch: $lightSwitch, sunlightSwitch: $sunlightSwitch, bodyCameraSwitch: $spacecraftCameraSwitch)
+
+            //Text("Motion Data")
             //Text("quaternion: \(motion.motionQuaternion.debugDescription)")
 
             
@@ -35,9 +48,11 @@ struct ContentView: View {
 
 
 
-
+/*
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView(motion: MotionManager())
+        //ContentView(motion: MotionManager())
+        ControlsView()
     }
 }
+*/
