@@ -107,7 +107,7 @@ struct SceneKitView: UIViewRepresentable {
         // set the scene to the view
         scnView.scene = scene
 
-        //scnView.backgroundColor     = UIColor.black
+        scnView.backgroundColor     = UIColor.black
 
         scnView.allowsCameraControl = false
 
@@ -121,6 +121,12 @@ struct SceneKitView: UIViewRepresentable {
         toggleSpacecraftCamera(scnView)
 
         print("Motion Manager: \(motion.motionQuaternion.debugDescription)")
+
+
+        if scnView.pointOfView == scnView.scene?.rootNode.childNode(withName: "OrionCommanderCameraNode", recursively: true) {
+            print("We're moving with device motion.")
+            moveCameraWithDeviceMotion(scnView)
+        }
     }
 
 
@@ -160,8 +166,30 @@ struct SceneKitView: UIViewRepresentable {
     func toggleSpacecraftCamera(_ scnView: SCNView) {
         if spacecraftCameraSwitch == true {
             scnView.pointOfView = scnView.scene?.rootNode.childNode(withName: "OrionCommanderCameraNode", recursively: true)
+            motion.resetReferenceFrame()
         } else {
             scnView.pointOfView = scnView.scene?.rootNode.childNode(withName: "OrionChase360CameraNode", recursively: true)
+        }
+    }
+
+
+
+    func moveCameraWithDeviceMotion(_ scnView: SCNView) {
+        if scnView.pointOfView == scnView.scene?.rootNode.childNode(withName: "OrionCommanderCameraNode", recursively: true)
+        {
+            //let reference                        = motion.referenceFrame // This is a CMAttitude! Converet!!!
+            var cmdrCameraQuaternion             = motion.motionQuaternion
+            //cmdrCameraQuaternion                 = simd_mul(cmdrCameraQuaternion, reference.simdOrientation).normalized
+
+
+            let commanderCameraNode              = scnView.scene?.rootNode.childNode(withName: "OrionCommanderCameraNode", recursively: true)
+            /*commanderCameraNode?.simdOrientation = simd_quatf(angle: -.pi / 2.0,
+                                                                axis: simd_normalize(simd_float3(x: 0, y: 1, z: 0))).normalized*/
+
+            commanderCameraNode?.simdOrientation = simd_quatf(angle: -.pi / 2.0,
+                                                                axis: simd_normalize(simd_float3(x: 0, y: 1, z: 0))).normalized
+
+            commanderCameraNode!.simdOrientation  = simd_mul(commanderCameraNode!.simdOrientation, cmdrCameraQuaternion).normalized
         }
     }
 
@@ -180,7 +208,6 @@ struct SceneKitView: UIViewRepresentable {
             self._lightSwitch = lightSwitch
             self._sunlightSwitch = sunlightSwitch
         }
-
 
 
         // Double-Tap Action
@@ -204,7 +231,8 @@ struct SceneKitView: UIViewRepresentable {
         // Pan Action
         var initialCenter = CGPoint()  // The initial center point of the view.
 
-        @objc func panPiece(_ gestureRecognizer : UIPanGestureRecognizer) {
+
+        /*@objc func panPiece(_ gestureRecognizer : UIPanGestureRecognizer) {
             guard gestureRecognizer.view != nil else {return}
 
             print("More panning...")
@@ -230,13 +258,13 @@ struct SceneKitView: UIViewRepresentable {
               // On cancellation, return the piece to its original location.
               piece.center = initialCenter
            }
-        }
-
-
+        }*/
 
         var totalChangePivot = SCNMatrix4Identity
 
+
         @objc func panGesture(_ gestureRecognize: UIPanGestureRecognizer){
+
             //print("Panning...")
             let translation = gestureRecognize.translation(in: gestureRecognize.view!)
 

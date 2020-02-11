@@ -85,6 +85,7 @@ class MotionManager: ObservableObject {
         if motionManager.isDeviceMotionActive
         {
             referenceFrame          = motionManager.deviceMotion!.attitude
+            
         }
     }
 }
