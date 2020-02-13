@@ -20,13 +20,16 @@ class MotionManager: ObservableObject {
 
     var referenceFrame: CMAttitude?
     var motionTimer: Timer?
+    var deviceMotion: CMDeviceMotion?
 
 
 
 
     init() {
+        print("MotionManager initialized")
         self.motionManager = CMMotionManager()
         self.startDeviceMotion()
+        //self.startContinuousDeviceMotion()
     }
 
 
@@ -38,11 +41,13 @@ class MotionManager: ObservableObject {
 
             self.motionTimer = Timer(fire: Date(), interval: (1.0 / 60.0), repeats: true,
                                      block: { (motionTimer) in
-                                        if let deviceMotion = self.motionManager.deviceMotion {
-                                            self.referenceFrame     = deviceMotion.attitude
-                                            let deviceQ             = deviceMotion.attitude.quaternion
+                                        if let tempDeviceMotion = self.motionManager.deviceMotion {
+                                            self.deviceMotion       = tempDeviceMotion
+                                            self.referenceFrame     = tempDeviceMotion.attitude
+                                            let deviceQ             = tempDeviceMotion.attitude.quaternion
                                             self.motionQuaternion   = simd_quatf(ix: Float(deviceQ.x), iy: Float(deviceQ.y), iz: Float(deviceQ.z), r: Float(deviceQ.w))
                                         }
+                                        print("deviceMotion: \(String(describing: self.deviceMotion))")
             })
 
             // Add the timer to the current run loop.
@@ -57,15 +62,29 @@ class MotionManager: ObservableObject {
             self.motionManager.deviceMotionUpdateInterval = 1.0 / 60.0
             //self.motionManager.showsDeviceMovementDisplay = true
 
+            /*
+            self.motionManager.startDeviceMotionUpdates()
+
+            if let tempDeviceMotion = self.motionManager.deviceMotion {
+                self.deviceMotion       = tempDeviceMotion
+                self.referenceFrame     = tempDeviceMotion.attitude
+                let deviceQ             = tempDeviceMotion.attitude.quaternion
+                self.motionQuaternion   = simd_quatf(ix: Float(deviceQ.x), iy: Float(deviceQ.y), iz: Float(deviceQ.z), r: Float(deviceQ.w))
+            }
+            */
+
 
             self.motionManager.startDeviceMotionUpdates(to: OperationQueue.main, withHandler: {
                 myDeviceMotion, error in
-                if let deviceMotion         = myDeviceMotion {
-                    self.referenceFrame     = deviceMotion.attitude
-                    let deviceQ             = deviceMotion.attitude.quaternion
-                    self.motionQuaternion   = simd_quatf(ix: Float(deviceQ.x), iy: Float(deviceQ.y), iz: Float(deviceQ.z), r: Float(deviceQ.w))
+                if let tempDeviceMotion     = myDeviceMotion {
+                    self.deviceMotion       = tempDeviceMotion
+                    self.referenceFrame     = tempDeviceMotion.attitude
+                    let deviceQ             = tempDeviceMotion.attitude.quaternion
+                    self.motionQuaternion   = simd_quatf(ix: Float(deviceQ.x), iy: Float(deviceQ.y), iz: Float(deviceQ.z), r: Float(deviceQ.w)).normalized
                 }
+                print("dviceMotion: \(String(describing: self.deviceMotion))")
             })
+
         }
     }
 
@@ -85,7 +104,27 @@ class MotionManager: ObservableObject {
         if motionManager.isDeviceMotionActive
         {
             referenceFrame          = motionManager.deviceMotion!.attitude
-            
+
+        }
+    }
+
+
+
+    func updateAttitude() {
+        referenceFrame      = motionManager.deviceMotion!.attitude
+
+        if motionManager.deviceMotion != nil {
+            deviceMotion?.attitude.multiply(byInverseOf: referenceFrame!)
+
+            if deviceMotion?.attitude != nil {
+                print("deviceMotion.attitude != nil")
+
+                if deviceMotion?.attitude.quaternion != nil {
+                    print("deviceMotion.attitude.quaternion != nil")
+                    let deviceQ         = deviceMotion!.attitude.quaternion
+                    motionQuaternion    = simd_quatf(ix: Float(deviceQ.x), iy: Float(deviceQ.y), iz: Float(deviceQ.z), r: Float(deviceQ.w)).normalized
+                }
+            }
         }
     }
 }

@@ -97,6 +97,14 @@ struct SceneKitView: UIViewRepresentable {
         let panGestureRecognizer = UIPanGestureRecognizer(target: context.coordinator, action: #selector(Coordinator.panGesture(_:)))
         scnView.addGestureRecognizer(panGestureRecognizer)
 
+        if motion.deviceMotion?.attitude.quaternion != nil {
+            print("SceneKitView MakeUIView deviceMotion.attitude.quaternion != nil")
+            motion.updateAttitude()
+        }
+        else {
+            print("SceneKitView MakeUIView deviceMotion.attitude.quaternion == nil")
+        }
+
         return scnView
     }
 
@@ -120,11 +128,12 @@ struct SceneKitView: UIViewRepresentable {
 
         toggleSpacecraftCamera(scnView)
 
-        print("Motion Manager: \(motion.motionQuaternion.debugDescription)")
+        //print("Motion Manager: \(motion.motionQuaternion.debugDescription)")
 
 
         if scnView.pointOfView == scnView.scene?.rootNode.childNode(withName: "OrionCommanderCameraNode", recursively: true) {
-            print("We're moving with device motion.")
+            //print("We're moving with device motion.")
+            //motion.updateAttitude()
             moveCameraWithDeviceMotion(scnView)
         }
     }
@@ -178,7 +187,7 @@ struct SceneKitView: UIViewRepresentable {
         if scnView.pointOfView == scnView.scene?.rootNode.childNode(withName: "OrionCommanderCameraNode", recursively: true)
         {
             //let reference                        = motion.referenceFrame // This is a CMAttitude! Converet!!!
-            var cmdrCameraQuaternion             = motion.motionQuaternion
+            let cmdrCameraQuaternion             = motion.motionQuaternion
             //cmdrCameraQuaternion                 = simd_mul(cmdrCameraQuaternion, reference.simdOrientation).normalized
 
 
@@ -196,7 +205,7 @@ struct SceneKitView: UIViewRepresentable {
 
 
 
-    class Coordinator: NSObject {
+    class Coordinator: NSObject, SCNSceneRendererDelegate {
 
         @Binding var lightSwitch: Bool
         @Binding var sunlightSwitch: Int
@@ -208,6 +217,25 @@ struct SceneKitView: UIViewRepresentable {
             self._lightSwitch = lightSwitch
             self._sunlightSwitch = sunlightSwitch
         }
+
+
+
+        func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval)
+        {
+            print("scenekit renderer")
+            // The main input pump for the simulator.
+            /*
+            if _previousUpdateTime == 0.0
+            {
+                _previousUpdateTime     = time
+            }
+
+
+            _deltaTime                  = time - _previousUpdateTime
+            _previousUpdateTime         = time
+             */
+        }
+
 
 
         // Double-Tap Action
