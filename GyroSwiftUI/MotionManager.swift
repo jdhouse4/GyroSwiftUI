@@ -21,6 +21,8 @@ class MotionManager: ObservableObject {
     var referenceFrame: CMAttitude?
     var motionTimer: Timer?
     var deviceMotion: CMDeviceMotion?
+    var motionQuaterionAvailable: Bool = false
+    var resetFrame: Bool = false
 
 
 
@@ -28,64 +30,73 @@ class MotionManager: ObservableObject {
     init() {
         print("MotionManager initialized")
         self.motionManager = CMMotionManager()
+        self.setupDeviceMotion()
+        //self.startDeviceMotion()
+    }
+
+
+
+    func setupDeviceMotion() {
+        //var cycles: Int = 1
+        if motionManager.isDeviceMotionAvailable {
+            self.motionManager.deviceMotionUpdateInterval = 1.0 / 60.0
+            self.motionManager.startDeviceMotionUpdates()
+
+
+            while motionQuaterionAvailable == false {
+                if self.motionManager.deviceMotion != nil {
+                    if self.motionManager.isDeviceMotionActive {
+
+                        self.deviceMotion = self.motionManager.deviceMotion
+
+                        if motionManager.isGyroAvailable {
+                            if motionManager.deviceMotion?.attitude != nil {
+
+                                self.referenceFrame = self.deviceMotion?.attitude
+
+                                self.deviceMotion?.attitude.multiply(byInverseOf: self.referenceFrame!)
+
+                                self.motionQuaterionAvailable = true
+                            }
+                        }
+                    }
+                }
+                //cycles += 1
+                //print("cycles: \(cycles)") // Usually takes between 1,800 to 2,000 cycles before gyro is available.
+            }
+        }
+        print("deviceMotion: \(String(describing: self.deviceMotion))")
+        print("referenceFrame: \(String(describing: self.referenceFrame))")
+
         self.startDeviceMotion()
-        //self.startContinuousDeviceMotion()
     }
 
 
 
     func startDeviceMotion() {
-        if motionManager.isDeviceMotionAvailable {
-            self.motionManager.deviceMotionUpdateInterval = 1.0 / 60.0
-            self.motionManager.startDeviceMotionUpdates()
+        self.motionTimer = Timer(fire: Date(), interval: (1.0 / 60.0), repeats: true,
+                                 block: { (motionTimer) in
+                                    if self.deviceMotion != nil {
+                                        self.motionQuaternion = simd_quatf(ix: Float((self.deviceMotion?.attitude.quaternion.x)!),
+                                                                           iy: Float((self.deviceMotion?.attitude.quaternion.y)!),
+                                                                           iz: Float((self.deviceMotion?.attitude.quaternion.z)!),
+                                                                           r:  Float((self.deviceMotion?.attitude.quaternion.w)!)).normalized
+                                    }
+                                    /*
+                                    if let motionData = self.motionManager.deviceMotion {
+                                        self.motionQuaternion   = simd_quatf(ix: Float(motionData.attitude.quaternion.x),
+                                                                             iy: Float(motionData.attitude.quaternion.y),
+                                                                             iz: Float(motionData.attitude.quaternion.z),
+                                                                             r:  Float(motionData.attitude.quaternion.w)).normalized
+                                    }
+                                    */
+        })
 
-            self.motionTimer = Timer(fire: Date(), interval: (1.0 / 60.0), repeats: true,
-                                     block: { (motionTimer) in
-                                        if let tempDeviceMotion = self.motionManager.deviceMotion {
-                                            self.deviceMotion       = tempDeviceMotion
-                                            self.referenceFrame     = tempDeviceMotion.attitude
-                                            let deviceQ             = tempDeviceMotion.attitude.quaternion
-                                            self.motionQuaternion   = simd_quatf(ix: Float(deviceQ.x), iy: Float(deviceQ.y), iz: Float(deviceQ.z), r: Float(deviceQ.w))
-                                        }
-                                        print("deviceMotion: \(String(describing: self.deviceMotion))")
-            })
+        print("motionTimer set.")
 
-            // Add the timer to the current run loop.
-            RunLoop.current.add(self.motionTimer!, forMode: RunLoop.Mode.default)
-        }
-    }
+        // Add the timer to the current run loop.
+        RunLoop.current.add(self.motionTimer!, forMode: RunLoop.Mode.default)
 
-
-
-    func startContinuousDeviceMotion() {
-        if motionManager.isDeviceMotionAvailable {
-            self.motionManager.deviceMotionUpdateInterval = 1.0 / 60.0
-            //self.motionManager.showsDeviceMovementDisplay = true
-
-            /*
-            self.motionManager.startDeviceMotionUpdates()
-
-            if let tempDeviceMotion = self.motionManager.deviceMotion {
-                self.deviceMotion       = tempDeviceMotion
-                self.referenceFrame     = tempDeviceMotion.attitude
-                let deviceQ             = tempDeviceMotion.attitude.quaternion
-                self.motionQuaternion   = simd_quatf(ix: Float(deviceQ.x), iy: Float(deviceQ.y), iz: Float(deviceQ.z), r: Float(deviceQ.w))
-            }
-            */
-
-
-            self.motionManager.startDeviceMotionUpdates(to: OperationQueue.main, withHandler: {
-                myDeviceMotion, error in
-                if let tempDeviceMotion     = myDeviceMotion {
-                    self.deviceMotion       = tempDeviceMotion
-                    self.referenceFrame     = tempDeviceMotion.attitude
-                    let deviceQ             = tempDeviceMotion.attitude.quaternion
-                    self.motionQuaternion   = simd_quatf(ix: Float(deviceQ.x), iy: Float(deviceQ.y), iz: Float(deviceQ.z), r: Float(deviceQ.w)).normalized
-                }
-                print("dviceMotion: \(String(describing: self.deviceMotion))")
-            })
-
-        }
     }
 
 
@@ -99,32 +110,63 @@ class MotionManager: ObservableObject {
 
     func resetReferenceFrame()
     {
-        print("resetReferenceFrame")
+        print("\nresetReferenceFrame\n")
 
         if motionManager.isDeviceMotionActive
         {
             referenceFrame          = motionManager.deviceMotion!.attitude
-
         }
     }
 
 
 
     func updateAttitude() {
-        referenceFrame      = motionManager.deviceMotion!.attitude
+        print("\nmotion.updateAttitude")
+        deviceMotion = motionManager.deviceMotion
 
         if motionManager.deviceMotion != nil {
             deviceMotion?.attitude.multiply(byInverseOf: referenceFrame!)
-
-            if deviceMotion?.attitude != nil {
-                print("deviceMotion.attitude != nil")
-
-                if deviceMotion?.attitude.quaternion != nil {
-                    print("deviceMotion.attitude.quaternion != nil")
-                    let deviceQ         = deviceMotion!.attitude.quaternion
-                    motionQuaternion    = simd_quatf(ix: Float(deviceQ.x), iy: Float(deviceQ.y), iz: Float(deviceQ.z), r: Float(deviceQ.w)).normalized
-                }
-            }
         }
+
+        print("motionQuaternion: \(motionQuaternion)\n")
     }
 }
+
+
+
+/*
+ func startContinuousDeviceMotion() {
+     if motionManager.isDeviceMotionAvailable {
+         self.motionManager.deviceMotionUpdateInterval = 1.0 / 60.0
+         //self.motionManager.showsDeviceMovementDisplay = true
+
+         /*
+         self.motionManager.startDeviceMotionUpdates()
+
+         if let tempDeviceMotion = self.motionManager.deviceMotion {
+             self.deviceMotion       = tempDeviceMotion
+             self.referenceFrame     = tempDeviceMotion.attitude
+             let deviceQ             = tempDeviceMotion.attitude.quaternion
+             self.motionQuaternion   = simd_quatf(ix: Float(deviceQ.x), iy: Float(deviceQ.y), iz: Float(deviceQ.z), r: Float(deviceQ.w))
+         }
+         */
+
+
+         self.motionManager.startDeviceMotionUpdates(to: OperationQueue.main, withHandler: {
+             myDeviceMotion, error in
+             if let tempDeviceMotion     = myDeviceMotion {
+                 self.deviceMotion       = tempDeviceMotion
+                 self.referenceFrame     = tempDeviceMotion.attitude
+                 let deviceQ             = tempDeviceMotion.attitude.quaternion
+                 self.motionQuaternion   = simd_quatf(ix: Float(deviceQ.x), iy: Float(deviceQ.y), iz: Float(deviceQ.z), r: Float(deviceQ.w)).normalized
+             }
+             print("dviceMotion: \(String(describing: self.deviceMotion))")
+         })
+
+     }
+ }
+
+
+
+
+ */

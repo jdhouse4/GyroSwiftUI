@@ -30,13 +30,7 @@ struct SceneKitView: UIViewRepresentable {
     // SceneKit Properties
     let scene = SCNScene(named: "GyroSwiftUI.scnassets/Orion_CSM.scn")!
 
-    //var orionCSMNode: SCNNode = SCNNode()
-
-    //var sunlightNode: SCNNode = SCNNode()
-
-    var lightTextNode: SKLabelNode = SKLabelNode(fontNamed: "HelveticaNeue")
-
-    //var overlayScene: SKScene = SKScene()
+    //var lightTextNode: SKLabelNode = SKLabelNode(fontNamed: "HelveticaNeue")
 
 
 
@@ -51,42 +45,12 @@ struct SceneKitView: UIViewRepresentable {
         scnView.backgroundColor = UIColor.black
 
         // WorldCamera from scn file.
-        if let exteriorCameraNode = scene.rootNode.childNode(withName: "OrionCommanderCameraNode", recursively: true) {
-            print("Found OrionCommanderCameraNode")
+        if let exteriorCameraNode = scene.rootNode.childNode(withName: "OrionChase360CameraNode", recursively: true) {
+            print("Found OrionChace360CameraNode")
             scnView.pointOfView = exteriorCameraNode
         }
         else { print("Couldn't find OrionChase360CameraNode") }
 
-        //scnView.pointOfView = scene.rootNode.childNode(withName: "OrionCommanderCameraNode", recursively: true)
-
-
-        // Create Node
-        //orionCSMNode = scene.rootNode.childNode(withName: "Orion_CSM", recursively: true)!
-
-        // Now, using WorldLight from scn file.
-        //let sunlight  = scene.rootNode.childNode(withName: "SunLight", recursively: true)!
-
-        // This code is needed for placing the overlay text.
-        //let screenSize: CGSize =  UIScreen.main.bounds.size
-
-        // Find the center of the screen
-        //let screenCenter: CGPoint = CGPoint(x: screenSize.width/2, y: screenSize.height/2)
-
-        /*
-        // Give the overlayScene property a size.
-        overlayScene.size = CGSize(width: screenSize.width, height: screenSize.height)
-
-
-        // Add-in SKLabelNode for the light currently in use
-        lightTextNode.name = "SunlightTypeTextNode"
-        lightTextNode.text = worldLight.light!.type.rawValue
-        lightTextNode.fontSize = 30
-        lightTextNode.fontColor = .white
-        lightTextNode.position = CGPoint(x: screenCenter.x, y:  50)
-        overlayScene.addChild(lightTextNode)
-
-        scnView.overlaySKScene = overlayScene
-        */
 
         // Double-Tap Gesture Recognizer to Reset Orientation of the Model
         let doubleTapGestureRecognizer = UITapGestureRecognizer(target: context.coordinator, action: #selector(Coordinator.triggerDoubleTapAction(gestureReconizer:)))
@@ -97,21 +61,17 @@ struct SceneKitView: UIViewRepresentable {
         let panGestureRecognizer = UIPanGestureRecognizer(target: context.coordinator, action: #selector(Coordinator.panGesture(_:)))
         scnView.addGestureRecognizer(panGestureRecognizer)
 
-        if motion.deviceMotion?.attitude.quaternion != nil {
-            print("SceneKitView MakeUIView deviceMotion.attitude.quaternion != nil")
-            motion.updateAttitude()
-        }
-        else {
-            print("SceneKitView MakeUIView deviceMotion.attitude.quaternion == nil")
-        }
-
         return scnView
     }
 
 
 
     func updateUIView(_ scnView: SCNView, context: Context) {
+        //
+        // This is sort of like SCNSceneRendererDeleate's render() call.
+        //
         //print("updateUIView")
+
         // set the scene to the view
         scnView.scene = scene
 
@@ -128,12 +88,9 @@ struct SceneKitView: UIViewRepresentable {
 
         toggleSpacecraftCamera(scnView)
 
-        //print("Motion Manager: \(motion.motionQuaternion.debugDescription)")
-
-
         if scnView.pointOfView == scnView.scene?.rootNode.childNode(withName: "OrionCommanderCameraNode", recursively: true) {
-            //print("We're moving with device motion.")
-            //motion.updateAttitude()
+            print("We're moving with device motion.")
+            motion.updateAttitude()
             moveCameraWithDeviceMotion(scnView)
         }
     }
@@ -154,30 +111,35 @@ struct SceneKitView: UIViewRepresentable {
         switch sunlightSwitch {
         case 0:
             worldLight.light?.type = .directional
-            lightTextNode.text = worldLight.light?.type.rawValue
+            //lightTextNode.text = worldLight.light?.type.rawValue
         case 1:
             worldLight.light?.type = .spot
-            lightTextNode.text = worldLight.light?.type.rawValue
+            //lightTextNode.text = worldLight.light?.type.rawValue
         case 2:
             worldLight.light?.type = .omni
-            lightTextNode.text = worldLight.light?.type.rawValue
+            //lightTextNode.text = worldLight.light?.type.rawValue
         case 3:
             worldLight.light?.type = .ambient
-            lightTextNode.text = worldLight.light?.type.rawValue
+            //lightTextNode.text = worldLight.light?.type.rawValue
         default:
             worldLight.light?.type = .directional
-            lightTextNode.text = worldLight.light?.type.rawValue
+            //lightTextNode.text = worldLight.light?.type.rawValue
         }
     }
 
 
 
     func toggleSpacecraftCamera(_ scnView: SCNView) {
+
         if spacecraftCameraSwitch == true {
+            if motion.resetFrame == false {
+                motion.resetReferenceFrame()
+                motion.resetFrame = true
+            }
             scnView.pointOfView = scnView.scene?.rootNode.childNode(withName: "OrionCommanderCameraNode", recursively: true)
-            motion.resetReferenceFrame()
         } else {
             scnView.pointOfView = scnView.scene?.rootNode.childNode(withName: "OrionChase360CameraNode", recursively: true)
+            motion.resetFrame = false
         }
     }
 
@@ -186,17 +148,12 @@ struct SceneKitView: UIViewRepresentable {
     func moveCameraWithDeviceMotion(_ scnView: SCNView) {
         if scnView.pointOfView == scnView.scene?.rootNode.childNode(withName: "OrionCommanderCameraNode", recursively: true)
         {
-            //let reference                        = motion.referenceFrame // This is a CMAttitude! Converet!!!
             let cmdrCameraQuaternion             = motion.motionQuaternion
-            //cmdrCameraQuaternion                 = simd_mul(cmdrCameraQuaternion, reference.simdOrientation).normalized
-
 
             let commanderCameraNode              = scnView.scene?.rootNode.childNode(withName: "OrionCommanderCameraNode", recursively: true)
-            /*commanderCameraNode?.simdOrientation = simd_quatf(angle: -.pi / 2.0,
-                                                                axis: simd_normalize(simd_float3(x: 0, y: 1, z: 0))).normalized*/
 
             commanderCameraNode?.simdOrientation = simd_quatf(angle: -.pi / 2.0,
-                                                                axis: simd_normalize(simd_float3(x: 0, y: 1, z: 0))).normalized
+                                                               axis: simd_normalize(simd_float3(x: 0, y: 1, z: 0))).normalized
 
             commanderCameraNode!.simdOrientation  = simd_mul(commanderCameraNode!.simdOrientation, cmdrCameraQuaternion).normalized
         }
@@ -216,24 +173,6 @@ struct SceneKitView: UIViewRepresentable {
             self.scnView = scnView
             self._lightSwitch = lightSwitch
             self._sunlightSwitch = sunlightSwitch
-        }
-
-
-
-        func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval)
-        {
-            print("scenekit renderer")
-            // The main input pump for the simulator.
-            /*
-            if _previousUpdateTime == 0.0
-            {
-                _previousUpdateTime     = time
-            }
-
-
-            _deltaTime                  = time - _previousUpdateTime
-            _previousUpdateTime         = time
-             */
         }
 
 
@@ -259,34 +198,6 @@ struct SceneKitView: UIViewRepresentable {
         // Pan Action
         var initialCenter = CGPoint()  // The initial center point of the view.
 
-
-        /*@objc func panPiece(_ gestureRecognizer : UIPanGestureRecognizer) {
-            guard gestureRecognizer.view != nil else {return}
-
-            print("More panning...")
-            
-            let piece = gestureRecognizer.view!
-
-            // Get the changes in the X and Y directions relative to the superview's coordinate space.
-            let translation = gestureRecognizer.translation(in: piece.superview)
-
-            if gestureRecognizer.state == .began {
-
-                // Save the view's original position.
-              self.initialCenter = piece.center
-            }
-
-            // Update the position for the .began, .changed, and .ended states
-            if gestureRecognizer.state != .cancelled {
-              // Add the X and Y translation to the view's original position.
-              let newCenter = CGPoint(x: initialCenter.x + translation.x, y: initialCenter.y + translation.y)
-              piece.center = newCenter
-            }
-           else {
-              // On cancellation, return the piece to its original location.
-              piece.center = initialCenter
-           }
-        }*/
 
         var totalChangePivot = SCNMatrix4Identity
 
@@ -328,3 +239,35 @@ struct SceneKitView: UIViewRepresentable {
         }
     }
 }
+
+
+
+/*@objc func panPiece(_ gestureRecognizer : UIPanGestureRecognizer) {
+    guard gestureRecognizer.view != nil else {return}
+
+    print("More panning...")
+
+    let piece = gestureRecognizer.view!
+
+    // Get the changes in the X and Y directions relative to the superview's coordinate space.
+    let translation = gestureRecognizer.translation(in: piece.superview)
+
+    if gestureRecognizer.state == .began {
+
+        // Save the view's original position.
+      self.initialCenter = piece.center
+    }
+
+    // Update the position for the .began, .changed, and .ended states
+    if gestureRecognizer.state != .cancelled {
+      // Add the X and Y translation to the view's original position.
+      let newCenter = CGPoint(x: initialCenter.x + translation.x, y: initialCenter.y + translation.y)
+      piece.center = newCenter
+    }
+   else {
+      // On cancellation, return the piece to its original location.
+      piece.center = initialCenter
+   }
+}*/
+
+
