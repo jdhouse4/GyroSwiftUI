@@ -52,6 +52,8 @@ struct SceneKitView: UIViewRepresentable {
         else { print("Couldn't find OrionChase360CameraNode") }
 
 
+
+
         // Double-Tap Gesture Recognizer to Reset Orientation of the Model
         let doubleTapGestureRecognizer = UITapGestureRecognizer(target: context.coordinator, action: #selector(Coordinator.triggerDoubleTapAction(gestureReconizer:)))
         doubleTapGestureRecognizer.numberOfTapsRequired = 2
@@ -89,7 +91,6 @@ struct SceneKitView: UIViewRepresentable {
         toggleSpacecraftCamera(scnView)
 
         if scnView.pointOfView == scnView.scene?.rootNode.childNode(withName: "OrionCommanderCameraNode", recursively: true) {
-            print("We're moving with device motion.")
             motion.updateAttitude()
             moveCameraWithDeviceMotion(scnView)
         }
@@ -148,14 +149,15 @@ struct SceneKitView: UIViewRepresentable {
     func moveCameraWithDeviceMotion(_ scnView: SCNView) {
         if scnView.pointOfView == scnView.scene?.rootNode.childNode(withName: "OrionCommanderCameraNode", recursively: true)
         {
-            let cmdrCameraQuaternion             = motion.motionQuaternion
+            let cmdrCameraQuaternion                = motion.motionQuaternion
 
-            let commanderCameraNode              = scnView.scene?.rootNode.childNode(withName: "OrionCommanderCameraNode", recursively: true)
+            let commanderCameraNode                 = scnView.scene?.rootNode.childNode(withName: "OrionCommanderCameraNode", recursively: true)
+            commanderCameraNode!.pivot               = SCNMatrix4MakeTranslation(0.0, -0.075, 0.0) // The camera's 'neck'
 
-            commanderCameraNode?.simdOrientation = simd_quatf(angle: -.pi / 2.0,
+            commanderCameraNode?.simdOrientation    = simd_quatf(angle: -.pi / 2.0,
                                                                axis: simd_normalize(simd_float3(x: 0, y: 1, z: 0))).normalized
 
-            commanderCameraNode!.simdOrientation  = simd_mul(commanderCameraNode!.simdOrientation, cmdrCameraQuaternion).normalized
+            commanderCameraNode!.simdOrientation    = simd_mul(commanderCameraNode!.simdOrientation, cmdrCameraQuaternion).normalized
         }
     }
 

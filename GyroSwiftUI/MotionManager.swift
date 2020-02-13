@@ -82,14 +82,6 @@ class MotionManager: ObservableObject {
                                                                            iz: Float((self.deviceMotion?.attitude.quaternion.z)!),
                                                                            r:  Float((self.deviceMotion?.attitude.quaternion.w)!)).normalized
                                     }
-                                    /*
-                                    if let motionData = self.motionManager.deviceMotion {
-                                        self.motionQuaternion   = simd_quatf(ix: Float(motionData.attitude.quaternion.x),
-                                                                             iy: Float(motionData.attitude.quaternion.y),
-                                                                             iz: Float(motionData.attitude.quaternion.z),
-                                                                             r:  Float(motionData.attitude.quaternion.w)).normalized
-                                    }
-                                    */
         })
 
         print("motionTimer set.")
@@ -110,8 +102,6 @@ class MotionManager: ObservableObject {
 
     func resetReferenceFrame()
     {
-        print("\nresetReferenceFrame\n")
-
         if motionManager.isDeviceMotionActive
         {
             referenceFrame          = motionManager.deviceMotion!.attitude
@@ -121,14 +111,11 @@ class MotionManager: ObservableObject {
 
 
     func updateAttitude() {
-        print("\nmotion.updateAttitude")
         deviceMotion = motionManager.deviceMotion
 
         if motionManager.deviceMotion != nil {
             deviceMotion?.attitude.multiply(byInverseOf: referenceFrame!)
         }
-
-        print("motionQuaternion: \(motionQuaternion)\n")
     }
 }
 
