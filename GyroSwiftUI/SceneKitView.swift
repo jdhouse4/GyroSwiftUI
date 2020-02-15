@@ -116,18 +116,21 @@ struct SceneKitView: UIViewRepresentable {
 
 
     func toggleSpacecraftCamera(_ scnView: SCNView) {
-        print("motion.resetFrame: \(motion.resetFrame.description)")
+        //print("motion.resetFrame: \(motion.resetFrame.description)")
         if spacecraftCameraSwitch == true {
             if motion.resetFrame == true {
                 motion.resetReferenceFrame()
             }
-            print("toggleSpacecraftCamera to interior camera")
+            //print("toggleSpacecraftCamera to interior camera")
             scnView.pointOfView = scnView.scene?.rootNode.childNode(withName: "OrionCommanderCameraNode", recursively: true)
         } else {
-            print("toggleSpacecraftCamera to exterior camera")
+            //print("toggleSpacecraftCamera to exterior camera")
             scnView.pointOfView = scnView.scene?.rootNode.childNode(withName: "OrionChase360CameraNode", recursively: true)
-            motion.resetFrame = true
-            print("motion.resetFrame: \(motion.resetFrame.description)")
+            if motion.resetFrame == false {
+                //print("Toggling motion.resetFrame")
+                motion.resetFrame.toggle()
+            }
+            //print("motion.resetFrame: \(motion.resetFrame.description)")
         }
     }
 

@@ -102,13 +102,13 @@ class MotionManager: ObservableObject {
 
     func resetReferenceFrame()
     {
-        print("MotionManager resetReferenceFrame()")
+        //print("MotionManager resetReferenceFrame()")
         if motionManager.isDeviceMotionAvailable
         {
-            print("MotionManager device motion is available.")
+            //print("MotionManager device motion is available.")
             referenceFrame          = motionManager.deviceMotion!.attitude
             resetFrame.toggle()
-            print("resetFrame: \(resetFrame)")
+            //print("resetFrame: \(resetFrame)")
         }
     }
 
