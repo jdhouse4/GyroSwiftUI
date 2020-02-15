@@ -30,14 +30,11 @@ struct SceneKitView: UIViewRepresentable {
     // SceneKit Properties
     let scene = SCNScene(named: "GyroSwiftUI.scnassets/Orion_CSM.scn")!
 
-    //var lightTextNode: SKLabelNode = SKLabelNode(fontNamed: "HelveticaNeue")
-
 
 
     func makeUIView(context: Context) -> SCNView {
         print("makeUIView")
 
-        
         // retrieve the SCNView
         let scnView = SCNView()
 
@@ -51,14 +48,10 @@ struct SceneKitView: UIViewRepresentable {
         }
         else { print("Couldn't find OrionChase360CameraNode") }
 
-
-
-
         // Double-Tap Gesture Recognizer to Reset Orientation of the Model
         let doubleTapGestureRecognizer = UITapGestureRecognizer(target: context.coordinator, action: #selector(Coordinator.triggerDoubleTapAction(gestureReconizer:)))
         doubleTapGestureRecognizer.numberOfTapsRequired = 2
         scnView.addGestureRecognizer(doubleTapGestureRecognizer)
-
 
         let panGestureRecognizer = UIPanGestureRecognizer(target: context.coordinator, action: #selector(Coordinator.panGesture(_:)))
         scnView.addGestureRecognizer(panGestureRecognizer)
@@ -72,7 +65,6 @@ struct SceneKitView: UIViewRepresentable {
         //
         // This is sort of like SCNSceneRendererDeleate's render() call.
         //
-        //print("updateUIView")
 
         // set the scene to the view
         scnView.scene = scene
@@ -82,7 +74,7 @@ struct SceneKitView: UIViewRepresentable {
         scnView.allowsCameraControl = false
 
         // show statistics such as fps and timing information
-        scnView.showsStatistics     = true
+        //scnView.showsStatistics     = true
 
         //toggleBuzzFaceLamp(scnView)
 
@@ -112,35 +104,30 @@ struct SceneKitView: UIViewRepresentable {
         switch sunlightSwitch {
         case 0:
             worldLight.light?.type = .directional
-            //lightTextNode.text = worldLight.light?.type.rawValue
         case 1:
             worldLight.light?.type = .spot
-            //lightTextNode.text = worldLight.light?.type.rawValue
         case 2:
             worldLight.light?.type = .omni
-            //lightTextNode.text = worldLight.light?.type.rawValue
-        case 3:
-            worldLight.light?.type = .ambient
-            //lightTextNode.text = worldLight.light?.type.rawValue
         default:
             worldLight.light?.type = .directional
-            //lightTextNode.text = worldLight.light?.type.rawValue
         }
     }
 
 
 
     func toggleSpacecraftCamera(_ scnView: SCNView) {
-
+        print("motion.resetFrame: \(motion.resetFrame.description)")
         if spacecraftCameraSwitch == true {
-            if motion.resetFrame == false {
+            if motion.resetFrame == true {
                 motion.resetReferenceFrame()
-                motion.resetFrame = true
             }
+            print("toggleSpacecraftCamera to interior camera")
             scnView.pointOfView = scnView.scene?.rootNode.childNode(withName: "OrionCommanderCameraNode", recursively: true)
         } else {
+            print("toggleSpacecraftCamera to exterior camera")
             scnView.pointOfView = scnView.scene?.rootNode.childNode(withName: "OrionChase360CameraNode", recursively: true)
-            motion.resetFrame = false
+            motion.resetFrame = true
+            print("motion.resetFrame: \(motion.resetFrame.description)")
         }
     }
 

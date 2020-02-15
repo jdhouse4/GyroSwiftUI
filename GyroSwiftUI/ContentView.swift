@@ -34,7 +34,7 @@ struct ContentView: View {
                 //.scaleEffect(0.9, anchor: .center)
 
 
-            Spacer()
+            //Spacer()
 
             ControlsView(lightSwitch: $lightSwitch, sunlightSwitch: $sunlightSwitch, bodyCameraSwitch: $spacecraftCameraSwitch)
 

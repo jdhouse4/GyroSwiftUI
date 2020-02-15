@@ -14,12 +14,12 @@ struct CameraButton: View {
     var body: some View {
         Button(action: {
             withAnimation{ self.bodyCameraSwitch.toggle() }
-            print("Setting bodyCameraSwitch: \(self.bodyCameraSwitch)")
+            //print("Setting bodyCameraSwitch: \(self.bodyCameraSwitch)")
         }) {
-            Image(systemName: bodyCameraSwitch ? "video" :  "video.fill")
-                .imageScale(.large)
-                .accessibility(label: Text("Camera"))
-                .padding()
+            Image("Cameras") // systemName: bodyCameraSwitch ? "video" :  "video.fill"
+                .imageScale(.small)
+                //.accessibility(label: Text("Camera"))
+                //.padding()
         }
 
     }
