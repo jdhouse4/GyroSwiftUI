@@ -15,35 +15,61 @@ struct ContentView: View {
     @State var sunlightSwitch: Int          = 0
     @State var spacecraftCameraSwitch: Bool = false
 
+    @State var showSplash = true
+
+
 
     var body: some View {
-        VStack {
+        ZStack {
+            VStack {
 
-            //Spacer()
+                //Spacer()
 
-            Text("Orion In SwiftUI")
-                //.fixedSize()
-                .font(.headline)
+                Text("Orion In SwiftUI")
+                    //.fixedSize()
+                    .font(.headline)
 
-            //Spacer()
+                //Spacer()
 
 
-            SceneKitView(lightSwitch: $lightSwitch,
-                         sunlightSwitch: $sunlightSwitch,
-                         spacecraftCameraSwitch: $spacecraftCameraSwitch)
+                SceneKitView(lightSwitch: $lightSwitch,
+                             sunlightSwitch: $sunlightSwitch,
+                             spacecraftCameraSwitch: $spacecraftCameraSwitch)
                 //.scaleEffect(0.9, anchor: .center)
 
 
-            //Spacer()
+                //Spacer()
 
-            ControlsView(lightSwitch: $lightSwitch, sunlightSwitch: $sunlightSwitch, bodyCameraSwitch: $spacecraftCameraSwitch)
+                ControlsView(lightSwitch: $lightSwitch, sunlightSwitch: $sunlightSwitch, bodyCameraSwitch: $spacecraftCameraSwitch)
 
-            Text("Motion Data")
-            //Text("quaternion: \(motion.motionQuaternion.debugDescription)")
+                Text("Motion Data")
+                //Text("quaternion: \(motion.motionQuaternion.debugDescription)")
 
-            
+
+            }
+
+            SplashScreen()
+                .opacity(showSplash ? 1 : 0)
+                .onAppear() {
+                    self.retireSplashScreen()
+            }
         }
     }
+
+
+
+    fileprivate func retireSplashScreen() {
+        let deadline: DispatchTime = .now() + 3
+
+        DispatchQueue.main.asyncAfter(deadline: deadline) {
+            SplashScreen.shouldAnimate = false
+
+            withAnimation(Animation.easeOut(duration: 2)) {
+                self.showSplash = false
+            }
+        }
+    }
+
 }
 
 
