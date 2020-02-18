@@ -22,27 +22,24 @@ struct ContentView: View {
         ZStack {
 
             SplashScreen(animationComplete: self.$retireSplash)
+                .animation(.easeIn(duration: 1.0))
+                .transition(.opacity)
                 .opacity(retireSplash ? 0 : 1)
-                //.hidden()
-                .onAppear() {
+
+                /*.onAppear() {
                     if self.retireSplash {
                         print("SplashScreen retired.")
                     }
-                    //self.retireSplashScreen()
-            }
+            }*/
 
 
 
             if self.retireSplash {
                 VStack {
 
-                    //Spacer()
-
                     Text("Orion In SwiftUI")
                         //.fixedSize()
-                        .font(.headline)
-
-                    //Spacer()
+                        .font(.largeTitle)
 
 
                     SceneKitView(lightSwitch: $lightSwitch,
@@ -50,16 +47,14 @@ struct ContentView: View {
                                  spacecraftCameraSwitch: $spacecraftCameraSwitch)
                         .scaleEffect(0.95, anchor: .top)
 
-
-                    //Spacer()
+                    Spacer()
 
                     ControlsView(lightSwitch: $lightSwitch, sunlightSwitch: $sunlightSwitch, bodyCameraSwitch: $spacecraftCameraSwitch)
-
-                    Text("Motion Data")
-                    //Text("quaternion: \(motion.motionQuaternion.debugDescription)")
-
-
                 }
+                .animation(.easeIn(duration: 2.0))
+                .transition(.scale)
+                //.opacity(retireSplash ? 1 : 0)
+
             }
 
 
