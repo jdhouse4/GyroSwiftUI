@@ -20,6 +20,7 @@
 		E6936B3423F0B61A002C3EAD /* CameraButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6936B3123F0B619002C3EAD /* CameraButton.swift */; };
 		E6936B3523F0B61A002C3EAD /* ControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6936B3223F0B61A002C3EAD /* ControlsView.swift */; };
 		E6936B3723F0B976002C3EAD /* GyroSwiftUI.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = E6936B3623F0B976002C3EAD /* GyroSwiftUI.scnassets */; };
+		E6A9D41323FBA65A00006DDD /* OrionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A9D41223FBA65A00006DDD /* OrionView.swift */; };
 		E6B5336623F88B4A00D26557 /* SplashScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6B5336523F88B4A00D26557 /* SplashScreen.swift */; };
 		E6FABBB623F50EF200CEAA56 /* OrionScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FABBB523F50EF200CEAA56 /* OrionScene.swift */; };
 /* End PBXBuildFile section */
@@ -40,6 +41,7 @@
 		E6936B3123F0B619002C3EAD /* CameraButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraButton.swift; sourceTree = "<group>"; };
 		E6936B3223F0B61A002C3EAD /* ControlsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ControlsView.swift; sourceTree = "<group>"; };
 		E6936B3623F0B976002C3EAD /* GyroSwiftUI.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = GyroSwiftUI.scnassets; sourceTree = "<group>"; };
+		E6A9D41223FBA65A00006DDD /* OrionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrionView.swift; sourceTree = "<group>"; };
 		E6B5336523F88B4A00D26557 /* SplashScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplashScreen.swift; sourceTree = "<group>"; };
 		E6FABBB523F50EF200CEAA56 /* OrionScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrionScene.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -90,6 +92,7 @@
 				E60AC21523C39EC3007DECD8 /* LaunchScreen.storyboard */,
 				E60AC21823C39EC3007DECD8 /* Info.plist */,
 				E60AC21223C39EC3007DECD8 /* Preview Content */,
+				E6A9D41223FBA65A00006DDD /* OrionView.swift */,
 			);
 			path = GyroSwiftUI;
 			sourceTree = "<group>";
@@ -174,6 +177,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E6A9D41323FBA65A00006DDD /* OrionView.swift in Sources */,
 				E6FABBB623F50EF200CEAA56 /* OrionScene.swift in Sources */,
 				E6936B3323F0B61A002C3EAD /* SunLightButton.swift in Sources */,
 				E6936B3523F0B61A002C3EAD /* ControlsView.swift in Sources */,

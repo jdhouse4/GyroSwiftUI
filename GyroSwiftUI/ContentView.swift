@@ -29,6 +29,10 @@ struct ContentView: View {
 
 
             if self.retireSplash {
+                OrionView(lightSwitch: $lightSwitch,
+                          sunlightSwitch: $sunlightSwitch,
+                          spacecraftCameraSwitch: $spacecraftCameraSwitch)
+                /*
                 VStack {
 
                     Text("Orion In SwiftUI")
@@ -41,13 +45,15 @@ struct ContentView: View {
                                  spacecraftCameraSwitch: $spacecraftCameraSwitch)
                         .scaleEffect(0.95, anchor: .top)
 
+
                     Spacer()
+
 
                     ControlsView(lightSwitch: $lightSwitch, sunlightSwitch: $sunlightSwitch, bodyCameraSwitch: $spacecraftCameraSwitch)
                 }
                 .animation(.easeIn(duration: 2.0))
                 .transition(.scale)
-
+                */
             }
         }
     }
