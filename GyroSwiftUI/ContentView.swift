@@ -26,12 +26,6 @@ struct ContentView: View {
                 .transition(.opacity)
                 .opacity(retireSplash ? 0 : 1)
 
-                /*.onAppear() {
-                    if self.retireSplash {
-                        print("SplashScreen retired.")
-                    }
-            }*/
-
 
 
             if self.retireSplash {
@@ -53,62 +47,10 @@ struct ContentView: View {
                 }
                 .animation(.easeIn(duration: 2.0))
                 .transition(.scale)
-                //.opacity(retireSplash ? 1 : 0)
 
             }
-
-
-            /*
-            SplashScreen()
-                .opacity(showSplash ? 1 : 0)
-                .onAppear() {
-                    self.retireSplashScreen()
-            }
-            */
         }
     }
-
-
-    /*
-    fileprivate func retireSplashScreen() {
-        /*
-        if animationComplete == true {
-            print("Animation completed, so now time to fade-out the splash screen.")
-            let deadline: DispatchTime = .now() + 1
-
-            DispatchQueue.main.asyncAfter(deadline: deadline) {
-                SplashScreen.shouldAnimate = false
-
-                withAnimation(Animation.easeOut(duration: 2)) {
-                    self.showSplash = false
-                }
-            }
-        }
-        */
-        /*
-        let deadline: DispatchTime = .now() + 3
-
-        DispatchQueue.main.asyncAfter(deadline: deadline) {
-            SplashScreen.shouldAnimate = false
-
-            withAnimation(Animation.easeIn(duration: 1.0)) {
-                self.showSplash = false
-            }
-        }
-        */
-        /*
-        let deadline: DispatchTime = .now() + 3
-
-        DispatchQueue.main.asyncAfter(deadline: deadline) {
-            SplashScreen.shouldAnimate = false
-
-            withAnimation(Animation.easeIn(duration: 1.0)) {
-                self.retireSplash = true
-            }
-        }
-        */
-    }
-    */
 }
 
 
