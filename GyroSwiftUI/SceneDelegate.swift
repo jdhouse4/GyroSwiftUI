@@ -24,6 +24,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         // Create the SwiftUI view that provides the window contents.
         //let contentView = ContentView(motion: MotionManager())
+        //let contentView = ContentView(animationComplete: false)
         let contentView = ContentView()
 
         // Use a UIHostingController as window root view controller.
