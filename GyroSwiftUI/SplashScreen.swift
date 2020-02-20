@@ -16,7 +16,7 @@ struct SplashScreen: View {
     let launchCenterBlue                = Color("LaunchCenterBlue")
 
     let textZoomFactor: CGFloat         = 1.4
-    let rocketZoomFactor: CGFloat       = 0.35
+    let rocketZoomFactor: CGFloat       = 0.15
 
     @State var lineScale: CGFloat       = 1
     @State var textAlpha                = 0.5
@@ -32,11 +32,6 @@ struct SplashScreen: View {
     var body: some View {
         ZStack {
             /*
-            Image("Rocket")
-                .resizable(resizingMode: .tile)
-                .opacity(textAlpha)
-                .scaleEffect(textScale)
-
             Circle()
                 .fill(launchCenterBlue)
                 .frame(width: 1, height: 1, alignment: .center)
@@ -59,23 +54,6 @@ struct SplashScreen: View {
                 .scaleEffect(textScale)
 
             /*
-            Image("Rocket")
-                .resizable(resizingMode: .tile)
-                .opacity(textAlpha)
-                .scaleEffect(textScale)
-            */
-
-            /*
-            Rectangle()
-                .fill(squareColor)
-                .scaleEffect(squareScale * uZoomFactor)
-                .frame(width: uSquareLength, height: uSquareLength, alignment: .center)
-                .onAppear() {
-                    self.squareColor = Color.blue
-            }
-
-
-
             Rectangle()
                 .fill(launchCenterBlue)
                 .scaleEffect(lineScale, anchor: .bottom)
@@ -110,17 +88,17 @@ extension SplashScreen {
 
 
     func handleAnimations () {
-        runAnimationPart1()
-        runAnimationPart2()
-        //runAnimationPart3()
+        runRocketAppearsAnimation()
+        //runBounceAnimation()
+        runRocketLaunchAnimation()
         finishAnmation()
         //restartAnimation()
     }
 
 
 
-    func runAnimationPart1() {
-        print("runAnimationPart1")
+    func runRocketAppearsAnimation() {
+        print("runRocketAppearsAnimation")
 
         withAnimation(.easeIn(duration: animationDuration)) {
             textAlpha   = 1.0
@@ -128,14 +106,38 @@ extension SplashScreen {
             rocketScale = 0.1
         }
         /*
-        withAnimation(Animation.easeIn(duration: animationDuration).delay(0.2)) {
-            textAlpha   = 1.0
+        withAnimation(Animation.easeIn(duration: animationDuration).delay(0.5)) {
+            //textAlpha   = 1.0
             rocketAlpha = 1.0
+            rocketScale = 0.1
         }
         */
+
+        let deadline: DispatchTime = .now() + animationDuration + animationDelay
+        DispatchQueue.main.asyncAfter(deadline: deadline) {
+
+            withAnimation(Animation.spring()) {
+                self.textScale      = self.textZoomFactor
+                self.rocketScale    = self.rocketZoomFactor
+            }
+        }
+
+    }
+
+
+
+    func runBounceAnimation() {
+        print("runBounceAnimation")
         let deadline: DispatchTime = .now() + animationDuration + animationDelay
 
         DispatchQueue.main.asyncAfter(deadline: deadline) {
+            /*
+            withAnimation(Animation.easeIn(duration: self.minAnimationInterval)) {
+                //self.rocketAlpha = 1
+                //self.rocketPosition = -500.0
+            }
+            */
+
             withAnimation(Animation.spring()) {
                 self.textScale      = self.textZoomFactor
                 self.rocketScale    = self.rocketZoomFactor
@@ -145,34 +147,13 @@ extension SplashScreen {
 
 
 
-    func runAnimationPart2() {
-        print("runAnimationPart2")
-        let deadline: DispatchTime = .now() + animationDuration + animationDelay + minAnimationInterval
+    func runRocketLaunchAnimation() {
+        let deadline: DispatchTime = .now() + 2 * animationDuration + animationDelay + minAnimationInterval
 
         DispatchQueue.main.asyncAfter(deadline: deadline) {
-            /*
-            withAnimation(Animation.easeIn(duration: self.animationDelay)) {
-                self.rocketAlpha = 1
-                //self.rocketPosition = -500.0
-                print("Rocket blasting-off")
-            }
-            */
-            withAnimation(Animation.easeOut(duration: self.rocketLiftOffAnimationDuration)) {
+            withAnimation(.easeIn(duration: self.rocketLiftOffAnimationDuration)) {
                 self.rocketPosition = -800.0
-                //print("Animation Completed!")
-            }
-        }
-    }
-
-
-
-    func runAnimationPart3() {
-        let deadline: DispatchTime = .now() + 2 * animationDuration
-
-        DispatchQueue.main.asyncAfter(deadline: deadline) {
-            withAnimation(.easeIn(duration: self.finalAnimationDuration)) {
-                self.animationComplete = true
-                print("Animation Completed!")
+                print("Rocket blasting-off")
             }
         }
     }
@@ -180,15 +161,13 @@ extension SplashScreen {
     
 
     func finishAnmation() {
-        let deadline: DispatchTime = .now() + 2 * animationDuration
+        let deadline: DispatchTime = .now() + 3 * animationDuration
 
         DispatchQueue.main.asyncAfter(deadline: deadline) {
             withAnimation(Animation.easeOut(duration: self.fadeAnimationDuration)) {
                 self.animationComplete = true
                 print("Animation Completed!")
             }
-            //self.animationComplete = true
-            //print("Animation Completed!")
             print("That's all, folks!")
         }
     }
