@@ -15,12 +15,11 @@ struct SplashScreen: View {
 
     let launchCenterBlue                = Color("LaunchCenterBlue")
 
-    let textZoomFactor: CGFloat         = 1.4
-    let rocketZoomFactor: CGFloat       = 0.3
+    let textZoomFactor: CGFloat         = 1.5
+    let rocketZoomFactor: CGFloat       = 0.4
 
-    @State var lineScale: CGFloat       = 1
-    @State var textAlpha                = 0.5
-    @State var textScale: CGFloat       = 1
+    @State var textAlpha                = 0.0
+    @State var textScale: CGFloat       = 0.0
 
     @State var rocketScale: CGFloat     = 0.0
     @State var rocketAlpha              = 0.0
@@ -78,6 +77,7 @@ struct SplashScreen: View {
 
 extension SplashScreen {
     var animationDuration: Double { return 1.0 }
+    var animationBounceDuration: Double { 0.1 }
     var animationDelay: Double { return 0.2 }
     var rocketLiftOffAnimationDuration: Double { return 2.0 }
     var exitAnimationDuration: Double { return 0.3 }
@@ -89,7 +89,7 @@ extension SplashScreen {
 
     func handleAnimations () {
         runRocketAppearsAnimation()
-        runBounceAnimation()
+        //runBounceAnimation()
         runRocketLaunchAnimation()
         finishAnmation()
         //restartAnimation()
@@ -102,8 +102,17 @@ extension SplashScreen {
 
         withAnimation(.easeIn(duration: animationDuration)) {
             textAlpha   = 1.0
-            rocketAlpha = 1.0
-            rocketScale = 0.1
+            textScale   = 1.0
+        }
+
+        let deadline: DispatchTime = .now() + animationDuration
+        print("runRocketAppearsAnimation() deadline: \(deadline)")
+        DispatchQueue.main.asyncAfter(deadline: deadline) {
+
+            withAnimation(Animation.easeIn(duration: self.animationDelay)) {
+                self.rocketAlpha = 1.0
+                self.rocketScale = 0.1
+            }
         }
     }
 
@@ -111,25 +120,19 @@ extension SplashScreen {
 
     func runBounceAnimation() {
         print("runBounceAnimation")
-        let deadline: DispatchTime = .now() + animationDuration + animationDelay
+        let deadline: DispatchTime = .now() + 20 * animationBounceDuration
+        print("runBounceAnimation() deadline: \(deadline)")
 
         DispatchQueue.main.asyncAfter(deadline: deadline) {
-            /*
-            withAnimation(Animation.easeIn(duration: self.minAnimationInterval)) {
-                //self.rocketAlpha = 1
-                //self.rocketPosition = -500.0
-            }
-            */
-
-            withAnimation(Animation.spring(response: 0.5, dampingFraction: 0.5, blendDuration: 0.25)) {
-                self.textScale      = self.textZoomFactor
+            withAnimation(Animation.spring(response: 0.1, dampingFraction: 0.1, blendDuration: 0.25)) {
+                //self.textScale      = self.textZoomFactor
                 self.rocketScale    = self.rocketZoomFactor
             }
         }
 
-        DispatchQueue.main.asyncAfter(deadline: deadline + 0.2) {
-            withAnimation(Animation.spring(response: 0.5, dampingFraction: 0.5, blendDuration: 0.25)) {
-                self.textScale      = 1.0
+        DispatchQueue.main.asyncAfter(deadline: deadline + 6 * animationBounceDuration) {
+            withAnimation(Animation.spring(response: 0.1, dampingFraction: 0.1, blendDuration: 0.25)) {
+                //self.textScale      = 1.0
                 self.rocketScale    = 0.1
             }
         }
@@ -139,7 +142,8 @@ extension SplashScreen {
 
 
     func runRocketLaunchAnimation() {
-        let deadline: DispatchTime = .now() + 1.5 * animationDuration + animationDelay + minAnimationInterval
+        let deadline: DispatchTime = .now() + 1.75 * animationDuration + animationDelay + minAnimationInterval
+        print("runRocketLaunchAnimation() deadline: \(deadline)")
 
         DispatchQueue.main.asyncAfter(deadline: deadline) {
             withAnimation(.easeIn(duration: self.rocketLiftOffAnimationDuration)) {
@@ -153,6 +157,7 @@ extension SplashScreen {
 
     func finishAnmation() {
         let deadline: DispatchTime = .now() + 4 * animationDuration
+        print("finishAnimation() deadline: \(deadline)")
 
         DispatchQueue.main.asyncAfter(deadline: deadline) {
             withAnimation(Animation.easeOut(duration: self.fadeAnimationDuration)) {

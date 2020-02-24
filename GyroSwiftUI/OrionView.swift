@@ -23,16 +23,18 @@ struct OrionView: View {
                 .font(.largeTitle)
 
 
-            SceneKitView(lightSwitch: $lightSwitch,
-                         sunlightSwitch: $sunlightSwitch,
-                         spacecraftCameraSwitch: $spacecraftCameraSwitch)
-                .scaleEffect(0.95, anchor: .top)
+            //ZStack {
+                SceneKitView(lightSwitch: $lightSwitch,
+                             sunlightSwitch: $sunlightSwitch,
+                             spacecraftCameraSwitch: $spacecraftCameraSwitch)
+                    .scaleEffect(0.95, anchor: .top)
 
 
-            Spacer()
+                Spacer()
 
 
-            ControlsView(lightSwitch: $lightSwitch, sunlightSwitch: $sunlightSwitch, bodyCameraSwitch: $spacecraftCameraSwitch)
+                ControlsView(lightSwitch: $lightSwitch, sunlightSwitch: $sunlightSwitch, bodyCameraSwitch: $spacecraftCameraSwitch)
+            //}
         }
         .animation(.easeIn(duration: 2.0))
         .transition(.scale)
