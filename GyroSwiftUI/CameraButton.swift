@@ -14,12 +14,9 @@ struct CameraButton: View {
     var body: some View {
         Button(action: {
             withAnimation{ self.bodyCameraSwitch.toggle() }
-            //print("Setting bodyCameraSwitch: \(self.bodyCameraSwitch)")
         }) {
-            Image("Cameras") // systemName: bodyCameraSwitch ? "video" :  "video.fill"
+            Image("Cameras")
                 .imageScale(.small)
-                //.accessibility(label: Text("Camera"))
-                //.padding()
                 .background(Color.init(red: 0.5, green: 0.5, blue: 0.5, opacity: 0.4))
                 .cornerRadius(.infinity)
         }
