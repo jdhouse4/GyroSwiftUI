@@ -20,6 +20,8 @@ struct CameraButton: View {
                 .imageScale(.small)
                 //.accessibility(label: Text("Camera"))
                 //.padding()
+                .background(Color.init(red: 0.5, green: 0.5, blue: 0.5, opacity: 0.4))
+                .cornerRadius(.infinity)
         }
 
     }
