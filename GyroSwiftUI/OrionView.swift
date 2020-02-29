@@ -16,30 +16,25 @@ struct OrionView: View {
 
 
     var body: some View {
-        VStack {
-
-            Text("Orion In SwiftUI")
-                //.fixedSize()
-                .font(.largeTitle)
-
-
-            ZStack {
-                SceneKitView(lightSwitch: $lightSwitch,
-                             sunlightSwitch: $sunlightSwitch,
-                             spacecraftCameraSwitch: $spacecraftCameraSwitch)
-                    .scaleEffect(1.0, anchor: .top)
+        ZStack {
+            SceneKitView(lightSwitch: $lightSwitch,
+                         sunlightSwitch: $sunlightSwitch,
+                         spacecraftCameraSwitch: $spacecraftCameraSwitch)
+                .scaleEffect(1.0, anchor: .top)
 
 
-                VStack {
-                    Spacer()
+            VStack {
+                Text("Orion In SwiftUI") // This will likely be removed for LaunchCenter implementation.
+                    .font(.largeTitle)
+                    .foregroundColor(Color.white)
 
-                    ControlsView(lightSwitch: $lightSwitch, sunlightSwitch: $sunlightSwitch, bodyCameraSwitch: $spacecraftCameraSwitch)
-                }
+                Spacer()
+
+                ControlsView(lightSwitch: $lightSwitch, sunlightSwitch: $sunlightSwitch, bodyCameraSwitch: $spacecraftCameraSwitch)
             }
         }
         .animation(.easeIn(duration: 2.0))
         .transition(.scale)
-
     }
 }
 

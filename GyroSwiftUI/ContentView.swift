@@ -20,6 +20,8 @@ struct ContentView: View {
 
     var body: some View {
         ZStack {
+            Color.black
+                .edgesIgnoringSafeArea(.all)
 
             SplashScreen(animationComplete: self.$retireSplash)
                 .animation(.easeIn(duration: 1.0))
@@ -32,9 +34,9 @@ struct ContentView: View {
                 OrionView(lightSwitch: $lightSwitch,
                           sunlightSwitch: $sunlightSwitch,
                           spacecraftCameraSwitch: $spacecraftCameraSwitch)
-                    .background(Color.black)
             }
         }
+    .statusBar(hidden: true)
     }
 }
 
