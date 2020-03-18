@@ -87,7 +87,7 @@ class MotionManager: ObservableObject {
         //print("motionTimer set.")
 
         // Add the timer to the current run loop.
-        RunLoop.current.add(self.motionTimer!, forMode: RunLoop.Mode.default)
+        RunLoop.current.add(self.motionTimer!, forMode: RunLoop.Mode.common)
 
     }
 
