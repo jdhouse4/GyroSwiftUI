@@ -144,9 +144,9 @@ extension SplashScreen {
 
             withAnimation(Animation.easeIn(duration: self.textFadesAnimationDuration)) {
                 self.textAlpha      = 0.0
-                self.textScale      = 0.0
+                //self.textScale      = 0.0
 
-                self.gyroScale      = 0.0
+                //self.gyroScale      = 0.0
                 self.gyroAlpha      = 0.0
             }
         }
