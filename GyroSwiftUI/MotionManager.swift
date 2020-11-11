@@ -31,7 +31,6 @@ class MotionManager: ObservableObject {
         print("MotionManager initialized")
         self.motionManager = CMMotionManager()
         self.setupDeviceMotion()
-        //self.startDeviceMotion()
     }
 
 

@@ -15,6 +15,7 @@ struct SunLightButton: View {
             Button(action: {
                 self.sunlightSwitch += 1
 
+                //Cycles through the different types of light sources, e.g. omni, directional, etc.
                 if self.sunlightSwitch == 4 {
                     self.sunlightSwitch = 0
                 }
